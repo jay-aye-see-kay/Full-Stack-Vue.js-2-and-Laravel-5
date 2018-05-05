@@ -6,7 +6,8 @@ I'm using this readme file to keep my notes from the book Fullstack Vuejs and La
 * [Chapter 2](#chapter-2) - Basic functionality of Vue
 * [Chapter 3](#chapter-3) - Setting up Laravel
 * [Chapter 4](#chapter-4) - Make a simple web service
-* [Chapter 4](#chapter-5) - Webpack
+* [Chapter 5](#chapter-5) - Webpack
+* [Chapter 6](#chapter-6) - Vue components
 
 # Chapter 1
 
@@ -231,3 +232,39 @@ php artisan storage:link
 # Chapter 5
 
 Goals: Migrate front end prototype from Chapter 2 into this project, config webpack using laravel-mix.
+
+## Webpack
+Webpack is a bundler that takes assets like js/css/scss and bundles them into single files, it can also process files ie sass to css and ES2015+ to ES5. It is famously hard to configure so laravel comes with laravel-mix which does most of the config for us, and any config is done simply in the `webpack.mix.js` file.
+
+The two main advanages for us are that it can compile .vue files into js, and modern JS down to ES5 that almost all browsers can use.
+
+Laravel comes with a few CLI scripts make things easier, the main 3 are `npm run dev`, `npm run watch`, and `npm run prod`. These scripts can be changed/customised in `package.json`.
+
+## Vue in a blade file
+Both vue and blade files use the mustache syntax (`{{ exp }}`). To pass vue mustache brackets through a blade file we can escape them like so `@{{ exp }}`.
+
+## Browsersync
+Browsersync is a feature that comes with Yarn that auto reloads the page based on file changes, very useful when paired with `npm run watch`. Simply add the following to `webpack.mix.js` and it will proxy through `localhost:3000` with an autoreloading version of the site.
+```js
+mix.js('...', ',,,')
+  ...
+  .browserSync({
+    proxy: process.env.APP_URL,
+    open: false
+  });
+```
+
+## ES2015 and polyfills
+Laravel mix will run our js through babel to transpile it to ES5 syntax but it doesn't have polyfills for new Web APIs. These can be added individually from the `core-js` library.
+
+For example the `Object.assign()` method is new in ES2015 but could be added by added `import "core-js/fn/object/assign";` to the top of a file. And of course installing core-js:
+```bash
+ npm i --save-dev core-js
+ ```
+
+ #### Note:
+ The comments about polyfills are from the book, I think they might be out of date, and babel may handle polyfills automatically now...
+
+ # Chapter 6
+
+ Goals: Refactor some existing code to be more component based, add a component based image carousel.
