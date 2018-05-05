@@ -268,3 +268,42 @@ For example the `Object.assign()` method is new in ES2015 but could be added by 
  # Chapter 6
 
  Goals: Refactor some existing code to be more component based, add a component based image carousel.
+
+ ## Components
+ `<div>` and `<span>` are great but what if we could make our own custom tags/elements, that what vue (and pretty much every modern front-end framework) allow us to do. The easiest way to do that is with the Vue api like so
+ ```js
+ Vue.component('my-component', {
+     template: '<div>My component!</div>'
+});
+   new Vue({
+     el: '#app'
+});
+```
+
+Which can now be used like
+```html
+<div id="app">
+     <my-component></my-component>
+     <!-- Renders as <div>My component!</div> -->
+</div>
+```
+
+Each component can also have it's own state, ie a checkbox component can remember if it's checked. 
+
+```js
+Vue.component('check-box', {
+  template: '<div v-on:click="checked = !checked"></div>'
+  data() {
+    return {
+      checked: false
+    }
+  }
+});
+```
+
+*Note: data must be a function that returns an object so each object get's it's own version of it. Otherwise all copies of the checkbox would share the same state*.
+
+*Other note: registering components using the Vue api (like above) registers them globally, they can be used in any single file component without importing*.
+
+### Component names
+A component can be referred to in your code by a kebab-case name such as my-component, a PascalCase name such as MyComponent, or a camelCase name such as myComponent. Vue sees these all as the same component. However, in a DOM or string template, the component should always be kebab-cased.

@@ -39,19 +39,19 @@
 
             <div class="lists">
 
-                <feature-list title="Amenities">
-                    <div class="list-item" v-for="amenity in amenities" :key="amenity.id">
+                <feature-list title="Amenities" :items="amenities">
+                    <template slot-scope="amenity">
                         <i class="fa fa-lg" :class="amenity.icon"></i>
                         <span>@{{ amenity.title }}</span>
-                    </div>
+                    </template>
                 </feature-list>
 
-                <feature-list title="Prices">
-                    <div class="list-item" v-for="price in prices">
+                <feature-list title="Prices" :items="prices">
+                    <template slot-scope="price">
                         @{{ price.title }}: <strong>@{{ price.value }}</strong>
-                    </div>
+                    </template>
                 </feature-list>
-                
+
             </div>
 
         </div>
