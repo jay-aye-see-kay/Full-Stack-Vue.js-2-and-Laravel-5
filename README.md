@@ -1,6 +1,11 @@
 # About
 I'm using this readme file to keep my notes from the book Fullstack Vuejs and Laravel.
 
+## Content
+[Chapter 1](#chapter-1) - Just intro stuff, nothing interesting
+[Chapter 2](#chapter-2) - Basic functionality of Vue
+[Chapter 3](#chapter-3) - Setting up Laravel
+
 # Chapter 1
 
 Introducton to Vue and the two important (and officially support packages) Vuex and Vue-router. Some basic examples and descriptions of basic functionality. 
@@ -121,3 +126,4 @@ new Vue({
      }
 });
 ```
+# Chapter 3
