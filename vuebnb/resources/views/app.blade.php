@@ -38,24 +38,20 @@
             </div>
 
             <div class="lists">
-                <hr>
-                <div class="amenities list">
-                    <div v-for="amenity in amenities" :key="amenity.id">
+
+                <feature-list title="Amenities">
+                    <div class="list-item" v-for="amenity in amenities" :key="amenity.id">
                         <i class="fa fa-lg" :class="amenity.icon"></i>
                         <span>@{{ amenity.title }}</span>
                     </div>
-                </div>
-                <hr>
-                <div class="prices list">
-                    <div class="title">
-                        <strong>Prices</strong>
+                </feature-list>
+
+                <feature-list title="Prices">
+                    <div class="list-item" v-for="price in prices">
+                        @{{ price.title }}: <strong>@{{ price.value }}</strong>
                     </div>
-                    <div class="content">
-                        <div class="list-item" v-for="price in prices">
-                            @{{ price.title }}: <strong>@{{ price.value }}</strong>
-                        </div>
-                    </div>
-                </div>
+                </feature-list>
+                
             </div>
 
         </div>
