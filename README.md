@@ -6,6 +6,7 @@ I'm using this readme file to keep my notes from the book Fullstack Vuejs and La
 * [Chapter 2](#chapter-2) - Basic functionality of Vue
 * [Chapter 3](#chapter-3) - Setting up Laravel
 * [Chapter 4](#chapter-4) - Make a simple web service
+* [Chapter 4](#chapter-5) - Webpack
 
 # Chapter 1
 
@@ -226,3 +227,7 @@ Images in this project are stored in `public/images` and can be accessed from `u
 ```bash
 php artisan storage:link
 ```
+
+# Chapter 5
+
+Goals: Migrate front end prototype from Chapter 2 into this project, config webpack using laravel-mix.
