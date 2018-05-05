@@ -1,40 +1,120 @@
-# Full-Stack Vue.js 2 and Laravel 5
-This is the code repository for [Full-Stack Vue.js 2 and Laravel 5](https://www.packtpub.com/application-development/full-stack-vuejs-2-and-laravel-5?utm_source=github&utm_medium=repository&utm_campaign=9781788299589), published by [Packt](https://www.packtpub.com/?utm_source=github). It contains all the supporting project files necessary to work through the book from start to finish.
-## About the Book
-Vue is a JavaScript framework that can be used for anything from simple data display to sophisticated front-end applications and Laravel is a PHP framework used for developing fast and secure web-sites. This book gives you practical knowledge of building modern full-stack web apps from scratch using Vue with a Laravel back end.
+# About
+I'm using this readme file to keep my notes from the book Fullstack Vuejs and Laravel.
 
-In this book, you will build a room-booking website named "Vuebnb". This project will show you the core features of Vue, Laravel and other state-of-the-art web development tools and techniques.
+# Chapter 1
 
-The book begins with a thorough introduction to Vue.js and its core concepts like data binding, directives and computed properties, with each concept being explained first, then put into practice in the case-study project.
+Introducton to Vue and the two important (and officially support packages) Vuex and Vue-router. Some basic examples and descriptions of basic functionality. 
 
-You will then use Laravel to set up a web service and integrate the front end into a full-stack app. You will be shown a best-practice development workflow using tools like Webpack and Laravel Mix.
+* Directives are how we add functionality, they start with v-
+* Reactivity is a key function of Vue, it automatically updates the page based on it's data.
+* Components are a way to extend html syntax and create custom 'html tags' or components
+* Single file components put all logic, configuration, and styles in one file. The disadvange is that it requires a bundler (like webpack), so may not be worth it on small or legacy projects.
 
-With the basics covered, you will learn how sophisticated UI features can be added using ES+ syntax and a component-based architecture. You will use Vue Router to make the app multi-page and Vuex to manage application state.
+## Vue ecosystem
+Vue Devtools - browser extension that shows current vue state
+Vue Router - map different states of the SPA to urls to create virtual pages, doesn't trigger page reload so very fast
+Vuex - a central store of application data, essential for anything complex
 
-Finally, you will learn how to use Laravel Passport for authenticated AJAX requests between Vue and the API, completing the full-stack architecture. Vuebnb will then be prepared for production and deployed to a free Heroku cloud server.
+## Case study project - Vuebnb
+During the book we build mock marketplace like Airbnb, where users can look through a list of accomodation options, and can look at a single listing page with more details.
 
-## Instructions and Navigation
-All of the code is organized into folders. Each folder starts with a number followed by the application name. For example, Chapter02.
+## Code base
+The starter code for this project is here: https://github.com/PacktPublishing/Full-Stack-Vue.js-2-and-Laravel-5. (this repo is a clone of that one)
 
+# Chapter 2
 
+Cover basic vue functionality, install an config (without a bundler).
 
-The code will look like the following:
+## The vue instance
+
+Created by `var app = new Vue();` and normally passed a configuration object like:
+```vue
+var app = new Vue({
+  el: '#app',
+  data: {
+    ...
+  }
+})
 ```
-<div id="app">
-  <!--Vue has dominion within this node-->
+Where el refers to the root element of this vue instance and data is the data bound to this component. This data can be accessed using mustache sytax in the template ( `{{ data }}` ).
+
+## Binding
+Mustache syntax does not work in attributes, while `<div class="{{ styleClass }}"></div>` looks like it should work, but it won't. 
+
+The correct way is to bind a variable to the class attribute like this: `<div v-bind:class="styleClass"></div>` (any attribute with a `v-` prefix will be evaluated as a JS expression, not as text).
+
+## Directives
+`v-bind` is a directive. The other main ones are:
+* `v-if`: Conditionally render the element
+* `v-for`: Render the element multiple times
+* `v-on`: Attach an event listener to the object
+(There are more to come)
+
+Directives are also valid HTML atributes that will be ignored if vue is not present.
+
+If the directive requires an argument it will follow a colon after the directive eg; `v-on:click="..."`, if it doesn't require an argument it doesn't have a colon eg, `v-if="..."`.
+
+### Lists with v-for
+`v-for` requires an expression in the form of `v-for="item in items"`, where items is usually an array.
+
+They also require a key value for use by vue when re-rendering components. So a standard list would look like this:
+```html
+<div v-for="item in items" v-bind:key="item.id">
+     {{ item.title }}
 </div>
-<script>
-  new Vue({
-    el: '#app'
-  });
-</script>
 ```
 
-Before you begin development on the case-study project, you must ensure that you have the correct software and hardware.
+### Event listeners with v-on
+`v-on:click` is used in the same way as JS' `onclick`. A standard listener might look like `<button v-on:click="clicked = true">Click me</button>`.
 
-## Related Products
-* [Vue.js Design Patterns and Best Practices](https://www.packtpub.com/web-development/vuejs-design-patterns-and-best-practices?utm_source=github&utm_medium=repository&utm_campaign=9781788839792)
+## Lifecycle hooks
+We can hook into parts of vue's process to run code based on events. The hooks are:
+* beforeCreate
+* created
+* beforeMount
+* mounted
+* beforeUpdate
+* updated
+* beforeDestroy
+* destroyed
 
-* [Vue.js 2.x by Example](https://www.packtpub.com/application-development/vuejs-2x-example?utm_source=github&utm_medium=repository&utm_campaign=9781788293464)
+We can attach a function to one of these hooks by add a function of the same name to the element object like so:
+```vue
+var app = new Vue({
+  data: { ... },
+  created() {
+    ...
+  }
+})
+```
+ 
+ ## Methods
+ A vue config object can also take methods, these are just functions that have the vue instance set as this so other methods can be reference by `this.methodName()` and data values can be referenced by `this.dataValue`.
 
-* [Vue.js 2 Web Development Projects](https://www.packtpub.com/web-development/vuejs-2-web-development-projects?utm_source=github&utm_medium=repository&utm_campaign=9781787127463)
+ ## Listening for a keypress
+Events can have modifiers that follow after a dot, this great for detecting keypresses. To listen for the escape key we can do: `v-on:keyup.esc`.
+
+Unfortunately keypresses are handled by the body tag (unless something is in focus, like a text box in use), and a vue instance must be inside the body tag. So we can't just attach a key listener to our element we have to use some traditional JS.
+
+A good example of attaching a key listener for the the escape key is below. We have a method to listen for all keypresses and set `escPressed` if esc was pressed. The listener is added when the vue instance is added and remove with the vue instance.
+
+```vue
+new Vue({
+     data: { 
+       escPressed = false
+      },
+     methods: { 
+       escapeKeyListener: function(evt) {
+         if (evt.keyCode === 27 && this.modalOpen) {
+           this.escPressed = true;
+         }
+        }
+      },
+     created() {
+      document.addEventListener('keyup', this.escapeKeyListener);
+     },
+     destroyed() {
+      document.removeEventListener('keyup', this.escapeKeyListener);
+     }
+});
+```
