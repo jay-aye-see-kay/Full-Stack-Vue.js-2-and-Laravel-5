@@ -25,3 +25,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
         proxy: process.env.APP_URL,
         open: false
     });
+
+mix.options({
+    extractVueStyles: 'public/css/vue-style.css'
+});
