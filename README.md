@@ -145,3 +145,84 @@ Laravel 5.5 requires PHP 7+, composer, some other PHP extensions, a web server, 
 # Chapter 4
 
 Goals: Create a simple web service with Laravel, set up (with migrations) and seed the database, create API endpoints, serve images.
+
+## Migrations
+Migrations are a class with instructions of how to set up a database. They can be added with this artisan command
+```bash
+php artisan make:migration migration_description
+```
+
+Inside a migration file we can set up the schema of the table using the boilerplate code provided by the command above. After a migration has been set up it is applied to the database using
+```bash
+php artisan migrate
+```
+
+## Mock data
+The database can be filled with mock (or real) data using a seeder. Create a seeder like so
+```bash
+php artisan make:seeder FooTableSeeder
+```
+
+The database can be seeded with data from a json file, like in this book, or directly in php, or using a factory (see docs). Seeding from json is as easy as:
+```php
+public function run()
+   {
+     $path = base_path() . '/database/data.json';
+     $file = File::get($path);
+     $data = json_decode($file, true);
+     DB::table('listings')->insert($data);
+}
+```
+
+All seeding is done from the `DatabaseSeeder` class' run function. So need to put any new seeding classes in there. Then run 
+```bash
+php artisan db:seed
+```
+
+#### Notes (from experience):
+Sometimes we need to regenerate composer's autoloader for seeding to work
+```bash
+composer dump-autoload
+```
+
+To wipe the database, re-run migrations and re-seed:
+```bash
+php artisan migrate:refresh --seed
+```
+
+## Eloquent ORM
+Object Relational Mapping (ORM) is way of mapping rich objects from OO languages to scalar values used in relational databases. Eloquent uses the [active record design pattern](https://en.wikipedia.org/wiki/Active_record_pattern) where each model is tied to one table, and each instance is tied to a row.
+
+By default the model class name uses the UpperCameCase version of the (lower_underscore_case) table name and includes all fields(columns) in the table.
+
+A model can be created using the following command (this doesn't create a db table)
+```bash
+php artisan make:model ModelName
+```
+
+### Casting
+Data types between php and MySQL (or other dbs) don't line up exactly. For example MySQL doesn't have a boolean type and will just store 0 or 1. This could cause errors but by setting casts in the model it will correct any. Adding this array to a model's class can set cast types for fields.
+```php
+protected $casts = [
+  'field_name' => 'boolean',
+  ...
+];
+```
+
+## API routes
+APA routes are stored in `routes/api.php` as they have different middleware to web routes `routes/web.php`. They are also prefixed with `/api` in their URLs. Routes take the form
+```php
+Route::get('url/{optional_variable}', 'ControllerName@function');
+```
+
+## Controllers
+Controllers seperate the routes from the logic that each route has. They are created using:
+```php
+php artisan make:controller FooController
+```
+
+## Images
+Images in this project are stored in `public/images` and can be accessed from `url/images/image`. Normally images would be stored in `storage/app/public` and symlinked to public images using the command below or just served from a CDN.
+```bash
+php artisan storage:link
+```
