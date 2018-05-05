@@ -11,9 +11,9 @@ Introducton to Vue and the two important (and officially support packages) Vuex 
 * Single file components put all logic, configuration, and styles in one file. The disadvange is that it requires a bundler (like webpack), so may not be worth it on small or legacy projects.
 
 ## Vue ecosystem
-Vue Devtools - browser extension that shows current vue state
-Vue Router - map different states of the SPA to urls to create virtual pages, doesn't trigger page reload so very fast
-Vuex - a central store of application data, essential for anything complex
+* Vue Devtools - browser extension that shows current vue state
+* Vue Router - map different states of the SPA to urls to create virtual pages, doesn't trigger page reload so very fast
+* Vuex - a central store of application data, essential for anything complex
 
 ## Case study project - Vuebnb
 During the book we build mock marketplace like Airbnb, where users can look through a list of accomodation options, and can look at a single listing page with more details.
@@ -23,12 +23,12 @@ The starter code for this project is here: https://github.com/PacktPublishing/Fu
 
 # Chapter 2
 
-Cover basic vue functionality, install an config (without a bundler).
+Goals: Cover basic vue functionality, install and config (without a bundler).
 
 ## The vue instance
 
 Created by `var app = new Vue();` and normally passed a configuration object like:
-```vue
+```js
 var app = new Vue({
   el: '#app',
   data: {
@@ -65,7 +65,10 @@ They also require a key value for use by vue when re-rendering components. So a 
 ```
 
 ### Event listeners with v-on
-`v-on:click` is used in the same way as JS' `onclick`. A standard listener might look like `<button v-on:click="clicked = true">Click me</button>`.
+`v-on:click` is used in the same way as JS' `onclick`. A standard listener might look like:
+```html
+<button v-on:click="clicked = true">Click me</button>
+```.
 
 ## Lifecycle hooks
 We can hook into parts of vue's process to run code based on events. The hooks are:
@@ -79,7 +82,7 @@ We can hook into parts of vue's process to run code based on events. The hooks a
 * destroyed
 
 We can attach a function to one of these hooks by add a function of the same name to the element object like so:
-```vue
+```js
 var app = new Vue({
   data: { ... },
   created() {
@@ -98,7 +101,7 @@ Unfortunately keypresses are handled by the body tag (unless something is in foc
 
 A good example of attaching a key listener for the the escape key is below. We have a method to listen for all keypresses and set `escPressed` if esc was pressed. The listener is added when the vue instance is added and remove with the vue instance.
 
-```vue
+```js
 new Vue({
      data: { 
        escPressed = false
