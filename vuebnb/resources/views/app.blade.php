@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Vuebnb</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+    <script type="text/javascript">
+        window.vuebnb_listing_model = "{!! addslashes(json_encode($model)) !!}";
+    </script>
 </head>
 
 <body>
@@ -58,7 +61,7 @@
             <div id="modal" :class="{ show : modalOpen }">
                 <button @click="modalOpen = false" class="modal-close">&times;</button>
                 <div class="modal-content">
-                    <img src="{{ asset('images/header.jpg') }}" />
+                    <img :src="images[0]" />
                 </div>
             </div>
 
