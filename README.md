@@ -1,10 +1,11 @@
 # About
 I'm using this readme file to keep my notes from the book Fullstack Vuejs and Laravel.
 
-## Content
-[Chapter 1](#chapter-1) - Just intro stuff, nothing interesting
-[Chapter 2](#chapter-2) - Basic functionality of Vue
-[Chapter 3](#chapter-3) - Setting up Laravel
+## Table of Contents
+* [Chapter 1](#chapter-1) - Just intro stuff, nothing interesting
+* [Chapter 2](#chapter-2) - Basic functionality of Vue
+* [Chapter 3](#chapter-3) - Setting up Laravel
+* [Chapter 4](#chapter-4) - Make a simple web service
 
 # Chapter 1
 
@@ -127,3 +128,20 @@ new Vue({
 });
 ```
 # Chapter 3
+
+Goal: Introduce laravel and get a ~~Homestead~~Docker development evironment set up. (I don't like homestead and am used to docker so I'm going to differ from the book here)
+
+## About Larvel
+Laravel was at 5.5 when this book was published and 5.6 while I'm working through it. 5.5 is their current LTS version so we'll stick with that.
+
+Laravel should be useful for a variety of projects like:
+* Websites with use auth requirements
+* Web apps
+* Web services like APIs
+
+## Environment
+Laravel 5.5 requires PHP 7+, composer, some other PHP extensions, a web server, and a database. The book recommends homestead to get set up quickly but I found homestead too heavy so I'm going to user the docker set up recommended [here](https://medium.com/@shakyShane/laravel-docker-part-1-setup-for-development-e3daaefaf3c). This will be set up in the vuebnb folder.
+
+# Chapter 4
+
+Goals: Create a simple web service with Laravel, set up (with migrations) and seed the database, create API endpoints, serve images.
