@@ -20,11 +20,10 @@
     </div>
     <div id="app">
 
-        <div class="header">
-            <div class="header-img" :style="headerImageStyle" @click="modalOpen = true">
-                <button class="view-photos">View Photos</button>
-            </div>
-        </div>
+        <header-image
+            :image-url="images[0]"
+            @header-clicked="openModal"
+        ></header-image>
 
         <div class="container">
             <div class="heading">
@@ -59,14 +58,11 @@
                 </div>
             </div>
 
-            <div id="modal" :class="{ show : modalOpen }">
-                <button @click="modalOpen = false" class="modal-close">&times;</button>
-                <div class="modal-content">
-                    <image-carousel :images="images"></image-carousel>
-                </div>
-            </div>
-
         </div>
+
+        <modal-window ref="imagemodal">
+            <image-carousel :images="images"></image-carousel>
+        </modal-window>
 
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
