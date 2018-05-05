@@ -8,6 +8,7 @@ I'm using this readme file to keep my notes from the book Fullstack Vuejs and La
 * [Chapter 4](#chapter-4) - Make a simple web service
 * [Chapter 5](#chapter-5) - Webpack
 * [Chapter 6](#chapter-6) - Vue components
+* [Chapter 7](#chapter-7) - Vue router
 
 # Chapter 1
 
@@ -303,7 +304,142 @@ Vue.component('check-box', {
 
 *Note: data must be a function that returns an object so each object get's it's own version of it. Otherwise all copies of the checkbox would share the same state*.
 
-*Other note: registering components using the Vue api (like above) registers them globally, they can be used in any single file component without importing*.
-
 ### Component names
 A component can be referred to in your code by a kebab-case name such as my-component, a PascalCase name such as MyComponent, or a camelCase name such as myComponent. Vue sees these all as the same component. However, in a DOM or string template, the component should always be kebab-cased.
+
+## Single file components
+Single File Components (SFCs) are files with a `.vue` extension that contain the complete definition of a component. They are similar to HTML files with 3 optional root elements. `<template>`, `<script>`, and `<style>`.
+
+In the template tags should be the html to be rendered, variables, methods, and computed values can be referenced here between mustache brackets without previxing the with `this.`.
+
+In the script tags is all the logic for the component all the main parts needs to go in an object that is exported.
+
+In the style tags is standard css that will be applied everywhere, it's only put here for convenience. It can have a `scoped` attribute that will cause all the css to only affect this component.
+
+### Transforming .vue files
+To use single file components webpack requires the vue loader. Webpack mix is already set up with this, so nothing further needed in this project.
+
+## Composing with components
+Components can be nested as would be expected but they must be declare children components. using the Vue API it looks like this
+```js
+Vue.component('component-a', { ... }
+
+Vue.component('component-b', {
+  template: `<div>
+              <component-a></component-a>
+            </div>`,
+}
+```
+
+In a SFC declaring components looks like this
+```html
+<script>  
+import ComponentA from './ComponentA.vue';
+...
+export default {
+  ...
+  components: {
+    ComponentA,
+  }
+}
+</script>
+}
+```
+
+### Registration scope
+Components registered using the API above have global scope, they can be even be using in SFCs without declaring them. Components in a SFC have to be registered locally like above in every file they are used.
+
+The advantage of registering components locally is they are only added to the web app if they are used. Old unused components in a big project won't get included. Also it keeps the global namespace clearer.
+
+## Communicating with components
+Data can go down with `props` and back up with `events`. If elements fall outside the normal flow of the page `refs` can be used.
+
+## Props
+Props are read only data passed down from the parent element. They are sent like a directive, and must be declared to be used. Props can be text only or dyamic using `v-bind`. Dynamic props will automatically flow down and re-render.
+```js
+export default {
+  props: ['prop-a', 'prop-b'],
+  ...
+}
+```
+
+## Custom events
+Custom events can be emitted from a child and listened for by the parent (only the direct parent). A event can be emitted like below with any number of arguments containing payload/arguments.
+```js
+this.$emit('my-event', 'event payload');
+```
+
+The parent can listen for events using `v-on` or `@` like so.
+```html
+<parent-component @my-event="doSomething"></parent-component>
+```
+
+## Refs
+Refs are a special property that allows direct referencing of a component that's not a direct parent or child. A ref can be added to a component by
+```html
+<weird-component ref="weirdcomponentref"> ... </weird-component>
+```
+
+A ref can then be accessed (anywhere or root element only? CHECK) like so
+```js
+...
+methods: {
+  specialAction() {
+    this.$refs.weirdcomponentref.someState = true
+  }
+}
+```
+
+## Slots
+If a parent element puts content between the tags of a child element, that content will be placed where the `<slot></slot>` tags are in the child's template. All content in the slot is in the scope of the parent, it cannot access any data of the child.
+
+## Scoped slots
+Scoped slots allow a way of passing control back to the parent when rendering child components. Kind of complicated but off flexibility.
+
+In the child:
+```html
+<div>
+  <slot v-bind="item"></slot>
+</div>
+```
+
+In the parent:
+```html
+<child>
+  <template scoped-slot="theItem">
+    <span>{{ theItem }}</span>
+  </template>
+</child>
+```
+
+## Vue vs. Vue Runtime
+Standard Vue allows us to define components with template strings in `.js` files and have them compiled to render functions in the browser. If we can remove all tempate files from `.js` files and put all of the template strings in `.vue` files then we switch our vue to vue runtime which save ~25kB in production.
+
+Switching a template string for a render function:
+```js
+var app = new Vue({
+  template: `<ListingPage></ListingPage>`,
+  el: '#app',
+});
+```
+
+Becomes:
+```js
+var app = new Vue({
+  el: '#app',
+  render: h => h(ListingPage)
+});
+```
+
+To switch the vue version used add this to `webpack.mix.js`:
+```js
+mix.webpackConfig({
+  resolve: {
+    alias: {
+     'vue$': 'vue/dist/vue.runtime.esm.js'
+    }
+  }
+});
+```
+
+# Chapter 7
