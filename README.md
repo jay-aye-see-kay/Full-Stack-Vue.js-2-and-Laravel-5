@@ -68,7 +68,7 @@ They also require a key value for use by vue when re-rendering components. So a 
 `v-on:click` is used in the same way as JS' `onclick`. A standard listener might look like:
 ```html
 <button v-on:click="clicked = true">Click me</button>
-```.
+```
 
 ## Lifecycle hooks
 We can hook into parts of vue's process to run code based on events. The hooks are:
