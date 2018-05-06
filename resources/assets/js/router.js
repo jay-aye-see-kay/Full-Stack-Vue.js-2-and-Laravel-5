@@ -5,6 +5,7 @@ import store from './store';
 
 import ListingPage from '../components/ListingPage.vue';
 import HomePage from '../components/HomePage.vue';
+import SavedPage from '../components/SavedPage.vue';
 
 Vue.use(VueRouter);
 
@@ -14,16 +15,18 @@ let router = new VueRouter({
         return { x: 0, y: 0 }
     },
     routes: [{
-            name: 'home',
-            path: '/',
-            component: HomePage,
-        },
-        {
-            name: 'listing',
-            path: '/listing/:listing',
-            component: ListingPage,
-        },
-    ],
+        name: 'home',
+        path: '/',
+        component: HomePage,
+    }, {
+        name: 'listing',
+        path: '/listing/:listing',
+        component: ListingPage,
+    }, {
+        name: 'saved',
+        path: '/saved',
+        component: SavedPage,
+    }]
 });
 
 router.beforeEach((to, from, next) => {
