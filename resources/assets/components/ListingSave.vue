@@ -1,7 +1,7 @@
 <template>
 
     <div class="listing-save" @click.stop="toggleSaved()">
-        <i class="fa fa-lg fa-heart-o"></i>
+        <i :class="classes"></i>
     </div>
 
 </template>
@@ -11,7 +11,21 @@ export default {
     props: ['id'],
     methods: {
         toggleSaved() {
-            //todo
+            this.$store.commit('toggleSaved', this.id);
+        }
+    },
+    computed: {
+        isListingSaved() {
+            return this.$store.state.saved.find(saved => saved === this.id);
+        },
+        classes() {
+            let saved = this.isListingSaved;
+            return {
+                'fa': true,
+                'fa-lg': true,
+                'fa-heart': saved,
+                'fa-heart-o': !saved,
+            }
         }
     }
 }
