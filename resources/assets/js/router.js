@@ -6,6 +6,7 @@ import store from './store';
 import ListingPage from '../components/ListingPage.vue';
 import HomePage from '../components/HomePage.vue';
 import SavedPage from '../components/SavedPage.vue';
+import LoginPage from '../components/LoginPage.vue';
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,10 @@ let router = new VueRouter({
         name: 'saved',
         path: '/saved',
         component: SavedPage,
+    }, {
+        name: 'login',
+        path: '/login',
+        component: LoginPage,
     }]
 });
 
@@ -33,7 +38,8 @@ router.beforeEach((to, from, next) => {
     let serverData = JSON.parse(window.vuebnb_server_data);
     if (to.name === 'listing' ?
         store.getters.getListing(to.params.listing) :
-        store.state.listing_summaries.length > 0
+        store.state.listing_summaries.length > 0 ||
+        to.name === 'login'
     ) {
         next();
     } else if (!serverData.path || to.path !== serverData.path) {

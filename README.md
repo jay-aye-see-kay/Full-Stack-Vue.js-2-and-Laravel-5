@@ -10,6 +10,7 @@ I'm using this readme file to keep my notes from the book Fullstack Vuejs and La
 * [Chapter 6](#chapter-6) - Vue components
 * [Chapter 7](#chapter-7) - Vue router
 * [Chapter 8](#chapter-8) - Managing state with Vuex
+* [Chapter 9](#chapter-9) - API auth with passport
 
 # Chapter 1
 
@@ -619,3 +620,46 @@ var app = new Vue({
   store,
 });
 ```
+
+## Mutator methods
+AKA setter methods, self explanitory. How to create:
+```js
+export default new Vuex.store({
+  state: { foo: true },
+  mutations: {
+    toggleFoo() {
+      state.foo = !state.foo
+    }
+  }
+})
+```
+
+Accessing the state can be done from anywhere directly:
+```js
+var foo = this.$store.bar
+```
+
+## Getters
+If what we want derived values from the store, and want to get them more than once it makes sense to use to getting function. They are defined in the same manner as mutations, in a getters object.
+
+## Router and beforeEach
+Now we have a Vuex store we can user the navigation guard `beforeEach` to replace `beforeRouteEnter`. I think `beforeEach` is better because it hooks into the route instead of the component. It has similar syntax and is added to the `js/router.js` file like so:
+```js
+import store from './store';
+
+let router = new VueRouter({
+  ...
+});
+
+router.beforeEach((to, from, next) => {
+  // some sort of route logic
+  next();
+})
+```
+
+# Chapter 9
+
+Goals: Create a user login system with CSRF protection and OAuth that stays logged in accross page refreshes.
+
+## Login system
+We need a login form, a POST route to recieve the form, a controller to check the login, and a session cookie to be sent back if login successfull.
