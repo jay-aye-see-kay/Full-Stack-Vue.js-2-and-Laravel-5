@@ -10,8 +10,21 @@
 
         <router-view></router-view>
 
+        <custom-footer></custom-footer>
+
     </div>
 </template>
+
+<script>
+import CustomFooter from './CustomFooter.vue';
+
+export default {
+    components: {
+        CustomFooter,
+    }
+}
+</script>
+
 
 <style>
 #toolbar {
