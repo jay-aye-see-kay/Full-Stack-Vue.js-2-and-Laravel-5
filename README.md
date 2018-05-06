@@ -9,6 +9,7 @@ I'm using this readme file to keep my notes from the book Fullstack Vuejs and La
 * [Chapter 5](#chapter-5) - Webpack
 * [Chapter 6](#chapter-6) - Vue components
 * [Chapter 7](#chapter-7) - Vue router
+* [Chapter 8](#chapter-8) - Managing state with Vuex
 
 # Chapter 1
 
@@ -498,6 +499,8 @@ export default new VueRouter({
 
 Then add the router to the vue config object
 ```js
+import router from './router';
+
 var app = new Vue({
     ...
     router,
@@ -581,3 +584,38 @@ export default {
 }
 ```
 
+# Chapter 8
+
+Goals: Understand the flux architecture pattern, set up Vuex, use Vuex's sweet debugging tools.
+
+## Flux application architecture
+This concept came from the facebook messenger developers who were have trouble with 'zombie' messages, notifications for messages that had already been read. They came to the conclusion that the issue came from teh architecture of their app where there were too many connections to predict what would actually happen. 
+
+### Principles of flux
+* Single source of truth - any data share between components must be kept in one place only
+* Data is read-only - only mutations (setters) can change the store
+* Mutations are synchronous - all mutation functions must be synchronous
+
+## Vuex
+Vuex is Vue's offical implementation of flux. Install like so:
+```bash
+npm i --save-dev vuex
+```
+
+And set up by creating a `js/store.js` with contents:
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+Vue.use(Vuex);
+export default new Vuex.Store();
+```
+
+And add the following to the vue config object
+```js
+import store from './store';
+
+var app = new Vue({
+  ...
+  store,
+});
+```
