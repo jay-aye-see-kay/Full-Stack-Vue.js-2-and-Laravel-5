@@ -48,7 +48,7 @@ var app = new Vue({
 Where el refers to the root element of this vue instance and data is the data bound to this component. This data can be accessed using mustache sytax in the template ( `{{ data }}` ).
 
 ## Binding
-Mustache syntax does not work in attributes, while `<div class="{{ styleClass }}"></div>` looks like it should work, but it won't. 
+Mustache syntax does not work in attributes, while `<div class="{{ styleClass }}"></div>` looks like it should work, it won't. 
 
 The correct way is to bind a variable to the class attribute like this: `<div v-bind:class="styleClass"></div>` (any attribute with a `v-` prefix will be evaluated as a JS expression, not as text).
 
@@ -108,7 +108,7 @@ Events can have modifiers that follow after a dot, this great for detecting keyp
 
 Unfortunately keypresses are handled by the body tag (unless something is in focus, like a text box in use), and a vue instance must be inside the body tag. So we can't just attach a key listener to our element we have to use some traditional JS.
 
-A good example of attaching a key listener for the the escape key is below. We have a method to listen for all keypresses and set `escPressed` if esc was pressed. The listener is added when the vue instance is added and remove with the vue instance.
+A good example of attaching a key listener for the the escape key is below. We have a method to listen for all keypresses and set `escPressed` if esc was pressed. The listener is added when the vue instance is added and removed with the vue instance.
 
 ```js
 new Vue({
@@ -169,7 +169,7 @@ php artisan make:seeder FooTableSeeder
 The database can be seeded with data from a json file, like in this book, or directly in php, or using a factory (see docs). Seeding from json is as easy as:
 ```php
 public function run()
-   {
+{
      $path = base_path() . '/database/data.json';
      $file = File::get($path);
      $data = json_decode($file, true);
@@ -264,7 +264,7 @@ For example the `Object.assign()` method is new in ES2015 but could be added by 
  ```
 
  #### Note:
- The comments about polyfills are from the book, I think they might be out of date, and babel may handle polyfills automatically now...
+ The comments about polyfills are from the book, I think they might be out of date, babel-polyfill can handle these without import statements per file.
 
  # Chapter 6
 
@@ -375,12 +375,12 @@ The parent can listen for events using `v-on` or `@` like so.
 ```
 
 ## Refs
-Refs are a special property that allows direct referencing of a component that's not a direct parent or child. A ref can be added to a component by
+Refs are a special property that allows direct referencing of a child component, and access to it's data object.
 ```html
 <weird-component ref="weirdcomponentref"> ... </weird-component>
 ```
 
-A ref can then be accessed (anywhere or root element only? CHECK) like so
+A ref can then be accessed by it's parent like so
 ```js
 ...
 methods: {
@@ -394,7 +394,7 @@ methods: {
 If a parent element puts content between the tags of a child element, that content will be placed where the `<slot></slot>` tags are in the child's template. All content in the slot is in the scope of the parent, it cannot access any data of the child.
 
 ## Scoped slots
-Scoped slots allow a way of passing control back to the parent when rendering child components. Kind of complicated but off flexibility.
+Scoped slots allow a way of passing data back to the parent when rendering child components. Kind of complicated but offers flexibility.
 
 In the child:
 ```html
@@ -412,8 +412,27 @@ In the parent:
 </child>
 ```
 
+Or for passing more than one variable back to the parent:
+
+In the child:
+```html
+<div>
+  <slot :my-prop-a="item.name" :my-prop-b="item.id"></slot>
+</div>
+```
+
+In the parent:
+```html
+<child>
+  <template scoped-slot="props">
+    <span>{{ props.my-prop-a }}</span>
+    <span>{{ props.my-prop-b }}</span>
+  </template>
+</child>
+```
+
 ## Vue vs. Vue Runtime
-Standard Vue allows us to define components with template strings in `.js` files and have them compiled to render functions in the browser. If we can remove all tempate files from `.js` files and put all of the template strings in `.vue` files then we switch our vue to vue runtime which save ~25kB in production.
+Standard Vue allows us to define components with template strings in `.js` files and have them compiled to render functions in the browser. If we can remove all template strings from `.js` files and put all of them in `.vue` files then we can switch our vue to vue runtime which save ~25kB in production.
 
 Switching a template string for a render function:
 ```js
