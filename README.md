@@ -462,3 +462,122 @@ mix.webpackConfig({
 ```
 
 # Chapter 7
+
+Goals: Give the project a home page and ocnfigure it to work with vue router, then add carousels to the front page.
+
+## Single page applications (SPAs)
+Traditional server/client websites perform a full page reload for every new page, often reloading a bunch of un-needed html and js that was already on the previous page.
+
+The SPA model changes pages without reloading, and new data required comes from an API. The advantage of this is less user waiting and often less bandwidth used. The disadvantage of this is browser built in features like history and remembering scroll position have to be re-implemented in JS (but the framework will handle most of that).
+
+## Vue router
+This is not included by default, but is made by the Vue team so integrates well. Vue router will handle our navigation, address bar updates, browser history, and scroll bar behaviour.
+
+Install Vue router:
+```bash
+npm i --save-dev vue-router
+```
+
+Basic router set up, create `js/router.js`
+```js
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import FooComponent from '../components/FooComponent.vue';
+Vue.use(VueRouter);
+
+export default new VueRouter({
+  routes: [
+    {
+      name: 'home', // name is optional but good practice
+      path: '/',
+      component: FooComponent,
+    },
+  ]
+});
+```
+
+Then add the router to the vue config object
+```js
+var app = new Vue({
+    ...
+    router,
+});
+```
+
+Then the router will render it's select component in the `router-view` tag, it normally goes somewhere high up. And the router's state can be changed by clicking on `router-link` tags, which render as `a` tags. A typical example of `App.vue`:
+```html
+<div>
+  <div id="menu">
+    <router-link :to="{ name: 'home' }"></router-link>
+    <router-link :to="{ name: 'about' }"></router-link>
+    ...
+  </div>
+
+  <router-view></router-view>
+
+  <custom-footer></custom-footer>
+</div>
+```
+
+### Note about the book
+In the book the author creates a system where the inital page state is sent as a json object with index.html so first page load speeds up a bit. This then creates a lot of complexity around current valid state and moves a bunch of front end logic to the back end.
+
+I followed his example in the code, but I don't think it's good software design so I'm not going to take any notes from that part of the chapter.
+
+## Route navigation guards
+Similar to lifecycle hooks, we can intercept vue router navigations. `beforeRouteEnter` is the most useful, but `afterEach` could be useful for something more subtle.
+
+Gaurds halt navigation until the `next` function is called. This allows async functions to run before page navigation. If `false` is passed to `next()` the navigation will be cancelled.
+```js
+beforeRouteEnter(to, from, next) {
+  // some code
+  next();
+}
+```
+
+In the `beforeRouteEnter` guard this is `undefined` because it is called before the next page's component had been created. However `next` can accept a callback that can access the new page component, and it will have access to scope of the surrounding code (because it's a closure). So we can do the following:
+```js
+beforeRouteEnter(to, from, next) {
+  var data = { /* data to pass to new page */ } 
+  next(component => { component.$data = data })
+}
+```
+
+## Scroll behaviour
+Unless we explicity give vue router some scroll behaviour the page will stay at the same place as routes change. When a user clicks on a new page they expect to see the top of the page, anything else is disorientating.
+
+We can easily tell vue router to always go to the top of the page for any route by adding this to `js/router.js`
+```js
+export default new VueRouter({
+  scrollBehavior (to, from, savedPosition) {
+    return {x: 0, y: 0}
+  },
+  ...
+})
+```
+
+## The route object
+The route object represent the state of the current route and can be accessed inside a component instance using `this.$route`.
+
+## Mixins
+Functionality that is shared between components can be put in a mixin. For example we could add a method to multiple components by creating a `js/mixins.js` like this:
+```js
+export default {
+    methods: {
+      commonMethod() {
+        console.log(this);
+      }
+    }
+};
+```
+
+Then adding the mixin to a SFC like so:
+```js
+import routeMixin from '../js/route-mixin';
+
+export default {
+  mixins: [ routeMixin ],
+...
+}
+```
+
