@@ -2,6 +2,7 @@
     <div>
 
         <header-image
+            v-if="images[0]"
             :image-url="images[0]"
             @header-clicked="openModal"
         ></header-image>
@@ -47,34 +48,47 @@
 </template>
 
 <script>
-    import { populateAmenitiesAndPrices } from '../js/helpers';
+import { populateAmenitiesAndPrices } from '../js/helpers';
 
-    import ImageCarousel from './ImageCarousel.vue';
-    import ModalWindow from './ModalWindow.vue';
-    import HeaderImage from './HeaderImage.vue';
-    import FeatureList from './FeatureList.vue';
-    import ExpandableText from './ExpandableText.vue';
+import ImageCarousel from './ImageCarousel.vue';
+import ModalWindow from './ModalWindow.vue';
+import HeaderImage from './HeaderImage.vue';
+import FeatureList from './FeatureList.vue';
+import ExpandableText from './ExpandableText.vue';
 
-    let model = JSON.parse(window.vuebnb_listing_model);
-    model = populateAmenitiesAndPrices(model);
+let serverData = JSON.parse(window.vuebnb_server_data);
+let model = populateAmenitiesAndPrices(serverData.listing);
 
-    export default {
-        data() {
-            return Object.assign(model, {});
+import routeMixin from '../js/route-mixin';
+
+export default {
+    mixins: [ routeMixin ],
+    data() {
+        return {
+            title: null,
+            about: null,
+            address: null,
+            amenities: [],
+            prices: [],
+            images: [],
+         }
+    },
+    components: {
+        ImageCarousel,
+        ModalWindow,
+        HeaderImage,
+        FeatureList,
+        ExpandableText,
+    },
+    methods: {
+        assignData({ listing }) {
+            Object.assign(this.$data, populateAmenitiesAndPrices(listing));
         },
-        methods: {
-            openModal() {
-                this.$refs.imagemodal.modalOpen = true;
-            }
+        openModal() {
+            this.$refs.imagemodal.modalOpen = true;
         },
-        components: {
-            ImageCarousel,
-            ModalWindow,
-            HeaderImage,
-            FeatureList,
-            ExpandableText,
-        }
-    }
+    },
+}
     
 </script>
 
