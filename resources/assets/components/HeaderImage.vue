@@ -6,6 +6,7 @@
         :style="headerImageStyle"
         @click="$emit('header-clicked')"
     >
+        <listing-save :id="id" :button="true"></listing-save>
         <button class="view-photos">View Photos</button>
     </div>
 </div>
@@ -13,7 +14,13 @@
 </template>
 
 <script>
+import ListingSave from './ListingSave.vue';
+
 export default {
+    props: [ 'image-url', 'id' ],
+    components: {
+        ListingSave,
+    },
     computed: {
         headerImageStyle() {
             return {
@@ -21,7 +28,6 @@ export default {
             }
         }
     },
-    props: ['image-url'],
 }
 </script>
 
