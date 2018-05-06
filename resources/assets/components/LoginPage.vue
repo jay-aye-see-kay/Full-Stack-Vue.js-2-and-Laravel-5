@@ -2,6 +2,7 @@
 
 <div id="login" class="login-container">
     <form role="form" action="/login" method="post">
+        <input type="hidden" name="_token" :value="csrf_token">
         <div class="form-control">
             <input type="email" name="email" id="email" placeholder="Email Address" required autofocus>
         </div>
@@ -17,7 +18,11 @@
 
 <script>
 export default {
-  
+    data() {
+        return {
+            csrf_token: window.csrf_token,
+        }
+    }
 }
 </script>
 
