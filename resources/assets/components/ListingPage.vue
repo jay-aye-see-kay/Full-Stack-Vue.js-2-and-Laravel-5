@@ -57,9 +57,6 @@ import HeaderImage from './HeaderImage.vue';
 import FeatureList from './FeatureList.vue';
 import ExpandableText from './ExpandableText.vue';
 
-// let serverData = JSON.parse(window.vuebnb_server_data);
-// let model = populateAmenitiesAndPrices(serverData.listing);
-
 export default {
     data() {
         return {}
@@ -81,9 +78,7 @@ export default {
     },
     computed: {
         listing() {
-            let listing = this.$store.state.listings.find(
-                listing => listing.id == this.$route.params.listing
-            );
+            let listing = this.$store.getters.getListing(this.$route.params.listing);
             return populateAmenitiesAndPrices(listing);
         }
     }
