@@ -15,6 +15,12 @@
 </head>
 
 <body>
+    @if ($errors->any())
+        <script>
+            window.vuebnb_errors = JSON.parse("{!! addslashes(json_encode($errors->all())) !!}");
+        </script>
+    @endif
+
     <div id="app"></div>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
