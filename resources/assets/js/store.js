@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
+import router from './router';
 
 Vue.use(Vuex);
 
@@ -8,11 +10,7 @@ export default new Vuex.Store({
         saved: [],
         listing_summaries: [],
         listings: [],
-    },
-    getters: {
-        getListing(state) {
-            return id => state.listings.find(listing => id == listing.id);
-        }
+        auth: false,
     },
     mutations: {
         toggleSaved(state, id) {
@@ -24,11 +22,29 @@ export default new Vuex.Store({
             }
         },
         addData(state, { route, data }) {
+            if (data.auth) { state.auth = data.auth }
+
             if (route == 'listing') {
                 state.listings.push(data.listing);
             } else {
                 state.listing_summaries = data.listings
             }
         },
-    }
+    },
+    actions: {
+        toggleSaved({ commit, state }, id) {
+            if (state.auth) {
+                axios.post('/api/user/toggle_saved', { id }).then(
+                    () => commit('toggleSaved', id)
+                );
+            } else {
+                router.push('/login');
+            }
+        }
+    },
+    getters: {
+        getListing(state) {
+            return id => state.listings.find(listing => id == listing.id);
+        }
+    },
 });
