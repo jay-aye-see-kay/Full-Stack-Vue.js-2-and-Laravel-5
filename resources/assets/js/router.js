@@ -7,6 +7,7 @@ import ListingPage from '../components/ListingPage.vue';
 import HomePage from '../components/HomePage.vue';
 import SavedPage from '../components/SavedPage.vue';
 import LoginPage from '../components/LoginPage.vue';
+import RegisterPage from '../components/RegisterPage.vue';
 
 Vue.use(VueRouter);
 
@@ -16,22 +17,28 @@ let router = new VueRouter({
         return { x: 0, y: 0 }
     },
     routes: [{
-        name: 'home',
-        path: '/',
-        component: HomePage,
-    }, {
-        name: 'listing',
-        path: '/listing/:listing',
-        component: ListingPage,
-    }, {
-        name: 'saved',
-        path: '/saved',
-        component: SavedPage,
-    }, {
-        name: 'login',
-        path: '/login',
-        component: LoginPage,
-    }]
+            name: 'home',
+            path: '/',
+            component: HomePage,
+        }, {
+            name: 'listing',
+            path: '/listing/:listing',
+            component: ListingPage,
+        }, {
+            name: 'saved',
+            path: '/saved',
+            component: SavedPage,
+        }, {
+            name: 'login',
+            path: '/login',
+            component: LoginPage,
+        },
+        {
+            name: 'register',
+            path: '/register',
+            component: RegisterPage
+        }
+    ]
 });
 
 router.beforeEach((to, from, next) => {
@@ -39,7 +46,8 @@ router.beforeEach((to, from, next) => {
     if (to.name === 'listing' ?
         store.getters.getListing(to.params.listing) :
         store.state.listing_summaries.length > 0 ||
-        to.name === 'login'
+        to.name === 'login' ||
+        to.name === 'register'
     ) {
         next();
     } else if (!serverData.path || to.path !== serverData.path) {

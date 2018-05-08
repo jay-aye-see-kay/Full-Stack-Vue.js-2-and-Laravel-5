@@ -109,3 +109,14 @@ button {
 input[type=text] {
     -webkit-appearance: none;
 }
+
+.register-container {
+    margin: 0 auto;
+    padding: 0 12px;
+}
+
+@media (min-width: 374px) {
+    .register-container {
+        width: 350px;
+    }
+}

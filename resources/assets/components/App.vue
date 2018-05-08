@@ -21,10 +21,12 @@
                         <input type="hidden" name="_token" :value="csrf_token">
                     </form>
                 </li>
-                <li v-else>
+                <li v-if="!$store.state.auth">
                     <router-link :to="{ name: 'login' }">Log In</router-link>
                 </li>
-                
+                <li v-if="!$store.state.auth">
+                    <router-link :to="{ name: 'register' }">Register</router-link>
+                </li>
             </ul>
         </div>
 
